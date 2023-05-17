@@ -72,19 +72,30 @@ async function xp(message) {
                   .setOverlay("#ffffff", 0, false)
                   .setBackground("COLOR", "#000001")
                   .setDiscriminator(user.discriminator, "#ffffff");
-                rank.build().then((data) => {
-                  const attachment = new AttachmentBuilder(data, "RankCard.png");
-                  message.channel.send({
-                    content: `${message.author.username} has leveled up to level ${z}\n\nHave you done g.forceupdate and g.forceroleupdate yet?`,
-                    files: [attachment],
+                rank
+                  .build()
+                  .then((data) => {
+                    const attachment = new AttachmentBuilder(data, "RankCard.png");
+                    message.channel.send({
+                      content: `${message.author.username} has leveled up to level ${z}\n\nHave you done g.forceupdate and g.forceroleupdate yet?`,
+                      files: [attachment],
+                    });
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    return message.reply("There was an error generating your card!");
                   });
-                });
               } else {
                 // If it's not them add 1 to the counter
                 i++;
               }
             });
+          })
+          .catch((error) => {
+            console.error(error);
+            return message.reply("There was an error generating your card!");
           });
+
         if (z >= 150) {
           let role = await mainGuild.roles.fetch("1044126473696591872");
           if (role) {

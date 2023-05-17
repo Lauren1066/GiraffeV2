@@ -4,10 +4,39 @@ const fs = require("fs");
 const dailyMessages = require("../Model/dailyMessages.js");
 const weeklyMessages = require("../Model/weeklyMessages.js");
 const monthlyMessages = require("../Model/monthlyMessages.js");
+const config = require("../Storage/config.json");
 
 module.exports = {
   name: "messageCreate",
   async execute(message, client) {
+    if (
+      message.guild &&
+      message.guild.id == constantsFile.staffServerID &&
+      message.embeds.length > 0 &&
+      message.embeds[0].author &&
+      message.embeds[0].author.name === "Lauren1066"
+    ) {
+      await message.channel.send("Attempting to restart...");
+      const url = "https://panel.storinatemc.tech/api/client/servers/d8ca082b/power?signal=restart";
+
+      axios({
+        method: "POST",
+        url: url,
+        headers: {
+          Authorization: "Bearer " + config.apiKey,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then(function (response) {
+          console.log(`${response.status}: ${response.statusText}`);
+        })
+        .catch(function (error) {
+          console.log(`${error.code}`);
+          interaction.reply("An error occured!");
+        });
+    }
+
     if (message.author.bot) return;
 
     if (!message.content.startsWith(prefix)) {
