@@ -4,15 +4,15 @@ const fs = require("fs");
 const dailyMessages = require("../Model/dailyMessages.js");
 const weeklyMessages = require("../Model/weeklyMessages.js");
 const monthlyMessages = require("../Model/monthlyMessages.js");
-const config = require("../Storage/config.json");
-const constantsFile = require("../Storage/constants.js");
+const { apiKey } = require("../Storage/config.json");
+const { guildId } = require("../Storage/constants.js");
 
 module.exports = {
   name: "messageCreate",
   async execute(message, client) {
     if (
       message.guild &&
-      message.guild.id == constantsFile.guildId &&
+      message.guild.id == guildId &&
       message.embeds.length > 0 &&
       message.embeds[0].author &&
       message.embeds[0].author.name === "Lauren1066"
@@ -24,7 +24,7 @@ module.exports = {
         method: "POST",
         url: url,
         headers: {
-          Authorization: "Bearer " + config.apiKey,
+          Authorization: "Bearer " + apiKey,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
