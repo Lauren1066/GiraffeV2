@@ -5,18 +5,18 @@ const dailyMessages = require("../Model/dailyMessages.js");
 const weeklyMessages = require("../Model/weeklyMessages.js");
 const monthlyMessages = require("../Model/monthlyMessages.js");
 const { apiKey } = require("../Storage/config.json");
-const { guildId } = require("../Storage/constants.js");
 
 module.exports = {
   name: "messageCreate",
   async execute(message, client) {
     if (
       message.guild &&
-      message.guild.id == guildId &&
+      message.guild.id == "980559928911618090" &&
       message.embeds.length > 0 &&
       message.embeds[0].author &&
       message.embeds[0].author.name === "Lauren1066"
     ) {
+      console.log("a");
       await message.channel.send("Attempting to restart...");
       const url = "https://panel.storinatemc.tech/api/client/servers/d8ca082b/power?signal=restart";
 
