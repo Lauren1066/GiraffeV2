@@ -16,7 +16,6 @@ module.exports = {
       message.embeds[0].author &&
       message.embeds[0].author.name === "Lauren1066"
     ) {
-      console.log("a");
       await message.channel.send("Attempting to restart...");
       const url = "https://panel.storinatemc.tech/api/client/servers/d8ca082b/power?signal=restart";
 
