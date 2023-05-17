@@ -5,13 +5,14 @@ const dailyMessages = require("../Model/dailyMessages.js");
 const weeklyMessages = require("../Model/weeklyMessages.js");
 const monthlyMessages = require("../Model/monthlyMessages.js");
 const config = require("../Storage/config.json");
+const constantsFile = require("../Storage/constants.js");
 
 module.exports = {
   name: "messageCreate",
   async execute(message, client) {
     if (
       message.guild &&
-      message.guild.id == constantsFile.staffServerID &&
+      message.guild.id == constantsFile.guildId &&
       message.embeds.length > 0 &&
       message.embeds[0].author &&
       message.embeds[0].author.name === "Lauren1066"
