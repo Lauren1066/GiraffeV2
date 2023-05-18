@@ -1,9 +1,9 @@
 const constants = require("../../../Storage/constants.js");
-const canvacord = require("canvacord");
 const rn = require("random-number");
 const { AttachmentBuilder } = require("discord.js");
 const expModel = require("../../../Model/exp.js");
 const { client } = require("../../../index.js");
+const { build } = require("../../../Functions/build.js");
 
 async function xp(message) {
   // Must be in Peachy! Server
@@ -43,58 +43,13 @@ async function xp(message) {
       y = data.xp - xpNeeded;
       data.xp = y;
 
-      const user = message.author;
       const permissions = message.channel.permissionsFor(message.client.user);
       const mainGuild = await client.guilds.fetch(constants.guildId);
       if (permissions.has("AttachFiles") && permissions.has("SendMessages")) {
-        // Find the data for the server (So it can show their rank on the leaderboard in the rank card)
-        expModel
-          .find({})
-          .sort({ level: -1, xp: -1 })
-          .then(async (res) => {
-            i = 1;
-            res.forEach((member) => {
-              // Go through each member in the database and find our user
-              if (member.memberID == data.memberID) {
-                // Make the rank card
-                const rank = new canvacord.Rank()
-                  .setAvatar(user.displayAvatarURL({ extension: "png" }))
-                  .setCurrentXP(data.xp, "#ffffff")
-                  .setRequiredXP(xpNeeded, "#ffffff")
-                  .setCustomStatusColor("#ffffff")
-                  .setProgressBar("#ffffff", "COLOR")
-                  .setUsername(user.username, "#ffffff")
-                  .setLevel(data.level)
-                  .setLevelColor("#ffffff", "#ffffff")
-                  .setFontSize("13")
-                  .setRank(i)
-                  .setRankColor("#ffffff", "#ffffff")
-                  .setOverlay("#ffffff", 0, false)
-                  .setBackground("COLOR", "#000001")
-                  .setDiscriminator(user.discriminator, "#ffffff");
-                rank
-                  .build()
-                  .then((data) => {
-                    const attachment = new AttachmentBuilder(data, "RankCard.png");
-                    message.channel.send({
-                      content: `${message.author.username} has leveled up to level ${z}\n\nHave you done g.forceupdate and g.forceroleupdate yet?`,
-                      files: [attachment],
-                    });
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    return message.reply("There was an error generating your card!");
-                  });
-              } else {
-                // If it's not them add 1 to the counter
-                i++;
-              }
-            });
-          })
-          .catch((error) => {
-            console.error(error);
-            return message.reply("There was an error generating your card!");
-          });
+        // Build their card
+        const image = await build(message.author, data);
+        const attachment = new AttachmentBuilder(image, { name: "rank.png" });
+        message.reply({ content: "You leveled up!", files: [attachment] });
 
         if (z >= 150) {
           let role = await mainGuild.roles.fetch("1044126473696591872");
@@ -132,7 +87,7 @@ async function xp(message) {
             message.member.roles.add(role);
           }
         } else if (z >= 20) {
-          let role = await mainGuild.roles.fetch("1044124395486060585"); // 1044124395486060585
+          let role = await mainGuild.roles.fetch("1044124395486060585");
           if (role) {
             message.member.roles.add(role);
           }
