@@ -22,7 +22,7 @@ module.exports = {
     });
 
     // Daily leaderboard
-    var dailyJob = new CronJob(
+    const dailyJob = new CronJob(
       constants.cronDaily,
       async function () {
         daily(client, dailyJob);
@@ -33,7 +33,7 @@ module.exports = {
     );
 
     // Weekly leaderboard
-    var weeklyJob = new CronJob(
+    const weeklyJob = new CronJob(
       constants.cronWeekly,
       async function () {
         weekly(client, weeklyJob);
@@ -44,7 +44,7 @@ module.exports = {
     );
 
     // Monthly leaderboard
-    var monthlyJob = new CronJob(
+    const monthlyJob = new CronJob(
       constants.cronMonthly,
       async function () {
         monthly(client, monthlyJob);
