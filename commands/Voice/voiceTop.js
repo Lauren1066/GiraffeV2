@@ -3,7 +3,7 @@ const voiceModel = require("../../Model/monthlyVoice.js");
 const ordinal = (num) => `${num.toLocaleString("en-US")}${[, "st", "nd", "rd"][(num / 10) % 10 ^ 1 && num % 10] || "th"}`;
 
 module.exports.run = async (client, message, args) => {
-  const leaderboard = await voiceModel.find({}).sort({ level: -1, xp: -1 }).limit(10);
+  const leaderboard = await voiceModel.find({}).sort({ minutes: -1 }).limit(10);
   if (leaderboard.length === 0) {
     return message.reply("No Data!");
   }
