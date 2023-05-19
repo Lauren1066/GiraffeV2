@@ -3,19 +3,10 @@ const dailyMessages = require("../../../Model/dailyMessages.js");
 const { EmbedBuilder } = require("discord.js");
 
 async function daily(client, dailyJob) {
-  const nextRunTime = dailyJob.nextDate();
-  const timestampInfo = nextRunTime.c;
-  const timestampDate = new Date(
-    timestampInfo.year,
-    timestampInfo.month - 1,
-    timestampInfo.day,
-    timestampInfo.hour,
-    timestampInfo.minute,
-    timestampInfo.second
-  );
+  const timeNow = new Date();
 
   // convert each date to a Unix timestamp
-  const unixTimestamp = Math.floor(timestampDate / 1000);
+  const unixTimestamp = Math.floor(timeNow.getTime() / 1000) + 86400;
 
   try {
     const channel = await client.channels.fetch(constants.leaderboardChannel);
